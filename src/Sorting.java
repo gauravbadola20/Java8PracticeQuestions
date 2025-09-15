@@ -167,6 +167,43 @@ public class Sorting {
     }
 
 
+    // quick sort
+    static int partition(int arr[], int low, int high) {
+        int pivot = arr[(low + high) / 2]; // ✅ pivot value
+
+        while (low <= high) {
+            while (low <= high && arr[low] < pivot) {
+                low++;
+            }
+            while (low <= high && arr[high] > pivot) {
+                high--;
+            }
+            if (low <= high) {
+                int temp = arr[low];
+                arr[low] = arr[high];
+                arr[high] = temp;
+                low++;
+                high--;
+            }
+        }
+        return low;
+    }
+
+
+    static void quickSortRecursion(int arr[], int low, int high){
+
+        int pi = partition(arr,low,high);
+
+        if (low < pi-1){
+            quickSortRecursion(arr,low,pi-1);
+        }
+
+        if (pi < high){
+            quickSortRecursion(arr,pi, high);
+        }
+    }
+
+
 
 
 
@@ -238,7 +275,19 @@ public class Sorting {
             System.out.print(arr[i] + " ");
         }
         System.out.println();
+
+
+
+        quickSortRecursion(arr,0,n-1);
+
+        System.out.println("After quick sort using recursion: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
     }
+
+
+
 
 
 
