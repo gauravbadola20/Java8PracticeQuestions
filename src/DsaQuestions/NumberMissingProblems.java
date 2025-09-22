@@ -1,5 +1,8 @@
 package DsaQuestions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NumberMissingProblems {
 
     public static int findMissingNumbers(int arr[],int n){
@@ -27,6 +30,8 @@ public class NumberMissingProblems {
 
 
 
+
+    // this is optima apparoach
     public static int finNumAppearOnce(int arr[], int n) {
         int hash[] = new int[100000];
 
@@ -45,16 +50,78 @@ public class NumberMissingProblems {
     }
 
 
+    // brtute force approach
+
+    public static int getSingleElement(int arr[], int n){
+
+
+        for (int i = 0; i < n; i++){
+
+            int num = arr[i];
+            int count = 0;
+
+
+
+            for (int j = 0; j < n; j++){
+
+                if (arr[j] == num){
+                    count++;
+                }
+            }
+
+            if (count == 1) return num;
+        }
+
+        return -1;
+    }
+
+
+    // another optimal approach
+
+    public static int getSingleElementUinggMap(int arr[], int n){
+
+        // declarre the hasmap,
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        for (int i = 0; i < n; i++){
+
+            if (!map.containsKey(arr[i])){
+
+
+                map.put(arr[i],1);
+
+            }else {
+             int count =    map.get(arr[i]);
+             count++;
+             map.put(arr[i], count);
+            }
+        }
+
+
+        // find the single element and return the answer
+        for (Map.Entry<Integer,Integer> it : map.entrySet()){
+
+           if (it.getValue()==1){
+
+               return it.getKey();
+           }
+        }
+
+        return -1;
+
+    }
+
+
 
 
 
     public static void main(String[] args) {
 
-        int arr[] = {2,2,1,1,4};
-        int n = arr.length;
-        System.out.println("This is the missing numbers:");
+        int[] arr = {4, 1, 2, 1, 2};
 
-        System.out.println(finNumAppearOnce(arr,n));
+        int n = arr.length;
+        int ans = getSingleElementUinggMap(arr,n);
+        System.out.println("The single element is: " + ans);;
 
 
 
