@@ -121,7 +121,8 @@ public class NumberMissingProblems {
 
         int n = arr.length;
         int ans = getSingleElementUinggMap(arr,n);
-        System.out.println("The single element is: " + ans);;
+        System.out.println("The single element is: " + ans);
+        System.out.println("This is the single elmeemnt:");
 
 
 
