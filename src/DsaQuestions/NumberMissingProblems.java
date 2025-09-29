@@ -123,6 +123,7 @@ public class NumberMissingProblems {
         int ans = getSingleElementUinggMap(arr,n);
         System.out.println("The single element is: " + ans);
         System.out.println("This is the single elmeemnt:");
+        System.out.println("This is the single elmeemnt:");
 
 
 
