@@ -50,13 +50,44 @@ public class PracticeMedium {
         return new int[]{-1,-1};
     }
 
+
+    public static void sortZerosOnesTwos(int arr[], int n){
+        int count1 = 0, count2 = 0, count3 = 0;
+
+        for (int i = 0; i  < n; i++){
+
+            if (arr[i] == 0){
+                count1++;
+
+            }else if (arr[i]==1){
+                count2++;
+            }else {
+                count3++;
+            }
+        }
+
+        int index = 0;
+        for (int i =0; i < count1; i++){
+            arr[index++] = 0;
+        }
+
+        for (int i = 0; i < count2; i++){
+            arr[index++] = 1;
+        }
+        for (int i = 0; i < count3; i++){
+            arr[index++] = 2;
+        }
+    }
+
     public static void main(String[] args) {
 
-        int arr[] = {2,6,5,8,11};
+        int[] arr = {0, 2, 1, 2, 0, 1, 2, 0};
         int n = arr.length;
-        int target = 14;
+        sortZerosOnesTwos(arr,n);
 
-        System.out.println(Arrays.toString(checkTwoSumUsingHashing(arr, n, target)));
-
+        System.out.print("Sorted Array: ");
+        for (int num : arr) {
+            System.out.print(num + " ");
+        }
     }
 }
