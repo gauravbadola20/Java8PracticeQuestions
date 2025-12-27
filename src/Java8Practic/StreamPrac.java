@@ -5,6 +5,7 @@ import java.sql.SQLSyntaxErrorException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StreamPrac {
 
@@ -250,14 +251,168 @@ public class StreamPrac {
               ));
 //      System.out.println(collect11);
 
-      Map<Character, Long> collect12 = str.chars().mapToObj(c -> (char) c)
-              .filter(c -> c != ' ')
-              .collect(Collectors.groupingBy(
-                      c -> c,
-                      Collectors.counting()
-              ));
+      // COUNT THE NUMBER OF FREQUENCY IN STRING
 
-      System.out.println(collect12);
+        Map<Character, Long> strFrequency = str.chars()
+                .mapToObj(c -> (char) c)
+                .filter(c -> c != ' ').collect(Collectors.groupingBy(
+                        c -> c,
+                        Collectors.counting()
+                ));
+
+
+        // count frequency of a string in sorted order
+
+        LinkedHashMap<Character, Long> countFtq = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        LinkedHashMap::new,
+                        Collectors.counting()
+                ));
+
+//        System.out.println(countFtq);
+
+        //find first non-repeating character
+
+        Map<Character, Long> characterLongEntry = str.chars()
+                .mapToObj(c -> (char) c)
+                .filter(c -> c != ' ')
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        LinkedHashMap::new,
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream()
+                .filter(c -> c.getValue() == 1)
+
+                .findFirst()
+                .map(e -> Map.of(e.getKey(), e.getValue()))
+                .orElse(null);
+
+
+
+
+        // find first no repeating character
+        List<Character> list2 = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        LinkedHashMap::new,
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream()
+                .filter(c -> c.getValue() > 1)
+                .map(Map.Entry::getKey)
+                .toList();
+
+
+
+
+//        System.out.println(c1);
+
+
+        //f reemove  the duplicate characters
+
+      String removeDuplicateElements = str.chars().distinct()
+                .mapToObj(c ->   String.valueOf ((char) c )  )
+                .collect(Collectors.joining());
+
+//        System.out.println(removeDuplicateElements);
+
+
+//        Count frequency of each word
+
+        Map<String, Long> countFreqWord = Arrays.stream(str.split("  "))
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ));
+
+
+//        Sort characters by frequency
+
+
+        str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<Character,Long>comparingByValue().reversed())
+                ;
+
+//
+
+
+        //Count frequency of each character
+
+        Map<Character, Long> countFreq = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+
+                        Collectors.counting()
+                ));
+
+
+
+//        First non-repeating character
+
+    Map.Entry<Character,Long> ch =  str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        LinkedHashMap::new,
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream()
+
+                .filter(c -> c.getValue() == 1)
+
+                .findFirst().orElse(null);
+
+//        First repeating character
+
+
+        Map.Entry<Character, Long> sortthe = str.chars()
+                .mapToObj(c -> (char) c)
+                .filter(c -> c != ' ')
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        TreeMap::new,
+
+                        Collectors.counting()
+
+                ))
+                .entrySet().stream().filter(c -> c.getValue() > 1)
+                .findFirst().orElse(null);
+
+
+//        All non-repeating characters
+
+        List<Map.Entry<Character, Long>> list3 = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ))
+                .entrySet().stream().filter(c -> c.getValue() > 1).toList();
+
+//        System.out.println(list3);
+
+
+//        Remove duplicate characters
+
+        List<Character> removeDuplicate = str.chars().mapToObj(c -> (char) c)
+                .distinct()
+                .collect(Collectors.toList());
+
 
     }
 
