@@ -409,11 +409,9 @@ public class StreamPrac {
 
 //        Remove duplicate characters
 
-        List<Character> removeDuplicate = str.chars().mapToObj(c -> (char) c)
+        str.chars().mapToObj(c -> (char) c)
                 .distinct()
                 .collect(Collectors.toList());
-
-
     }
 
 
