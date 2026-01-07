@@ -4,6 +4,7 @@ import javax.sound.sampled.Line;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -328,10 +329,286 @@ public class PracticeFromBasics {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
 
-        System.out.println(collect2);
+//        System.out.println(collect2);
+
+        String string1 = "java  stream api";
+
+        // counting characters
+
+        Map<Character, Long> collect3 = string1.chars()// chars() return the instream to make it char
+//                we need to yype caST IT IN CHAR
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+
+                ));
+
+//        System.out.println(collect3);
+
+//        Find first non-repeated character
+
+
+        Character c1 = string1
+                .chars().mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        LinkedHashMap::new,
+
+                        Collectors.counting()
+
+                ))
+                .entrySet()
+                .stream()
+                .filter(c -> c.getValue() == 1)
+                .map(Map.Entry::getKey)
+                .findFirst().orElse(null);
+
+//        3. Find duplicate characters
+
+        String s = "programming";
+
+        List<Character> collect4 = s
+                .chars().mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                )).entrySet()
+                .stream()
+                .filter(c -> c.getValue() > 1)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+
+//        4. Second highest number
+
+
+        int[] nums = {5, 9, 11, 2, 8, 11};
+
+        Integer i3 = Arrays.stream(nums).distinct()
+                .boxed()
+                .sorted(Comparator.reverseOrder())
+                .skip(1)
+                .findFirst().orElse(null);
+
+
+//        System.out.println(i3);
+
+        String sentence = "Java 8 stream api interview questions";
+//        5. Longest word in sentence
+
+        String string2 = Arrays.stream(sentence.split(" "))
+                .max(Comparator.comparingInt(String::length))
+                .orElse(null);
+
+//        System.out.println(string2);
+
+//        6. smallest word in the string
+        String string3 = Arrays.stream(sentence.split(" "))
+                .min(Comparator.comparingInt(String::length))
+                .orElse(null);
+
+//        System.out.println(string3);
+
+
+        List<Integer> parList = List.of(1,2,3,4,5,6);
+
+         parList.stream()
+                .collect(Collectors.partitioningBy(
+                        n -> n % 2 == 0
+                ));
+
+//        7. Sum of digits of a number
+
+        int num1 = 12345;
+
+        int sum1 = String.valueOf(num1)
+                .chars()
+                .map(c -> (char) c - '0')
+                .sum();
+
+//        🔥 8. Check palindrome using streams
+
+        String s1 = "madam";
+
+        boolean b1 = IntStream.range(0, s1.length() / 2)
+                .allMatch(j -> s1.charAt(j) == s1.charAt(s1.length() - j - 1));
+
+
+
+//        9. Sort map by values (DESC)
+
+        Map<String, Integer> map = Map.of(
+                "A", 3,
+                "B", 1,
+                "C", 2
+        );
+
+        LinkedHashMap<String, Integer> collect5 = map.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (a, c) -> a,
+                        LinkedHashMap::new
+                ));
+
+
+
+//        🔥 10. Find common elements between two lists
+        List<Integer> l1 = List.of(1,2,3,4);
+        List<Integer> l2 = List.of(3,4,5,6);
+
+
+        List<Integer> collect6 = l1.stream().filter(l2::contains)
+                .collect(Collectors.toList());
+
+//        System.out.println(collect6);
+
+        // remove duplicates
+
+        List<Integer> lust = List.of(1,2,2,3,1,4);
+
+        List<Integer> collect7 = lust.stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+//        System.out.println(collect7);
+
+
+//        🔥 12. Find max occurring character
+
+        String sb = "banana";
+
+        Map.Entry<Character, Long> characterLongEntry = sb.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        LinkedHashMap::new,
+                        Collectors.counting()
+                )).entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
+
+//        System.out.println(characterLongEntry);
+
+//        Group employees by department and find highest salary
+
+
+        List<Employee> employees = Arrays.asList(
+                new Employee(1, "Amit", "IT", 70000),
+                new Employee(2, "Rahul", "IT", 90000),
+                new Employee(3, "Neha", "HR", 60000),
+                new Employee(4, "Pooja", "HR", 80000),
+                new Employee(5, "Karan", "Finance", 75000)
+        );
+
+        Map<String, Optional<Employee>> collect8 = employees.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment,
+                        Collectors.maxBy(Comparator.comparing(Employee::getSalary))
+                ));
+
+//        System.out.println(collect8);
+
+
+//        4. Infinite stream but limit safely
+
+        // how to create infinite stream
+//        Stream.iterate(1, n-> n+1)
+//                .limit(10)
+//                .forEach(System.out::println);
+
+
+        // 🔥 15. Parallel stream side-effect bug
+
+
+
+//        Count frequency of characters in a string
+
+
+        String str = "gaurav badola";
+
+
+        Map<Character,Integer> countFreq = new LinkedHashMap<>();
+
+        for (char ch : str.toCharArray()){
+
+            if (!countFreq.containsKey(ch)){
+
+                countFreq.put(ch,1);
+
+            }else{
+
+             int count =    countFreq.get(ch);
+             count++;
+             countFreq.put(ch,count);
+            }
+
+
+        }
+
+        System.out.println(countFreq);
+
+//        Map<Integer, String> concurrentHashMap = new ConcurrentHashMap<>();
+//
+//        concurrentHashMap.put(1, "A");
+//
+//
+//        concurrentHashMap.forEach((k, v) -> {
+//            concurrentHashMap.put(2, "B");
+//        });
+
+
+//        here we are do somdcnkf
+
+        Map<Integer, String> conurrentCuurentHaspMap = new ConcurrentHashMap<>();
+
+        conurrentCuurentHaspMap.put(1,"a");
+
+        conurrentCuurentHaspMap.forEach((k,v) ->
+        {
+            System.out.println(k+ " "+v);
+            conurrentCuurentHaspMap.put(2,"n");
+
+
+        });
+
+
+        Map<String, Integer> map1 = Map.of("A", 10, "B", 20);
+        Map<String, Integer> map2 = Map.of("B", 30, "C", 40);
+
+//        Map<String, Integer> res1 = new HashMap<>(map1);
+//
+//        map2.forEach((k, v) ->
+//                res1.merge(k, v, Integer::sum)
+//        );
+//
+//        System.out.println(res1);
+
+        Map<String, Integer> res1 = new HashMap<>(map1);
+
+        map2.forEach((k,v) ->{
+
+            res1.merge(k,v, Integer::sum);
+
+        });
+
+        System.out.println(res1);
+
+
+
+
+
 
 
     }
+
+
+
+
+
 
 
 
