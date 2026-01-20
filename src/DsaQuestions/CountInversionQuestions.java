@@ -1,104 +1,98 @@
 package DsaQuestions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CountInversionQuestions {
 
 
+// count frequemcy of an array
 
-    // count inversion in an array
-//     it is happen where arr[i] > arr[i]
+    // arr {10,5,10,15,10,5}
 
-    public static int numberOfInversion(int arr[], int n){
+    public static void countFreq(int arr[], int n){
 
-        // count the number of paris
+        boolean visited [] = new boolean[n];
 
-        int cnt = 0;
-        for (int i =0; i <= n; i++){
-            for (int j = i+1; j <= n; j++){
-                if (arr[i] > arr[j]){
-                    cnt++;
+        int maxFreq = 0;
+        int maxElement = 0;
+
+
+
+        for (int i = 0; i < n; i++){
+            // skip this elements if already processed
+
+            if (visited[i] == true){
+                continue;
+            }
+
+            // count frequency
+
+            int count = 1;
+            for(int j = i+1; j < n; j++){
+                if (arr[i] == arr[j]){
+                    visited[j] = true;
+                    count++;
+
                 }
             }
-        }
-        return cnt;
 
+            if (maxFreq < count){
+                maxFreq = count;
+                maxElement = arr[i];
+            }
+
+
+
+
+
+        }
+        System.out.println(maxElement + " "+maxFreq);
     }
 
-    // now we use optimal approach using the merge sort
 
-    // function to merge two halves and count inversion
-    public static int merge(int arr[], int low, int mid, int high){
-        // temporary array
-        int temp[] = new int[high-low+1];
+    // using map to find the frequency
 
-        // starting indices of left and right halves
-        int left = low;
-        int right = mid + 1;
-        int k = 0;
+    public static void frequency(int arr[], int n){
 
-        //variable to count inversion
-        int cnt = 0;
+        int maxFreq = 0, maxElement = 0;
 
 
-        //merge elements in sorted order
-        while (left <= mid && right <= high){
+        Map<Integer,Integer> map = new HashMap<>();
 
-            if (arr[left] <= arr[right]){
-                temp[k++] = arr[left++];
+        for (int  i =0; i < n; i++){
 
-            }else {
-                temp[k++] = arr[right++];
+            if (!map.containsKey(arr[i])){
 
-                cnt += (mid - left + 1);// count inversion
+                map.put(arr[i],1);
+
+            }else{
+              int count =    map.get(arr[i]);
+              count++;
+              map.put(arr[i], count);
             }
         }
 
-        // copying remaining elements of left half
+        //traverse through map and print the frequency
 
-        while (left <= mid){
+        for(Map.Entry<Integer,Integer> entry : map.entrySet()){
 
-            temp[k++] = arr[left++];
+            int element = entry.getKey();
+
+            int count = entry.getValue();
+
+            if (maxFreq < count){
+
+                maxFreq = count;
+                maxElement = element;
+
+            }
+
+
 
         }
 
-        while (right <= high){
-
-            temp[k++] = arr[right++];
-
-        }
-
-        // copy back to original array
-
-        for (int  i = low; i <= high; i++){
-            arr[i] = temp[i-low];
-        }
-
-        return cnt;
-    }
-
-
-    // merge sort function
-
-    public static int mergeSort(int arr[], int low, int high){
-
-
-        int cnt = 0;
-
-        if (low >= high) return cnt;
-
-
-        int mid = (low + high) / 2;
-
-        cnt += mergeSort(arr, low, mid);
-
-        cnt += mergeSort(arr, mid+1, high);
-
-
-
-        cnt += merge(arr,low,mid,high);
-
-        return cnt;
-
-
+        System.out.println(maxFreq + " " + maxElement );
 
     }
 
@@ -106,15 +100,14 @@ public class CountInversionQuestions {
 
     public static void main(String[] args) {
 
-        int arr[] = {5,4,3,2,1};
+        int arr [] ={10,5,10,15,10,5};
 
-        int n = arr.length-1;
+        int n = arr.length;
 
-        int i = mergeSort(arr, 0, n);
+        countFreq(arr,n);
 
+//        frequency(arr, n);
 
-
-        System.out.println(i);
 
 
     }
