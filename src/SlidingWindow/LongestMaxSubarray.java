@@ -55,7 +55,7 @@ public class LongestMaxSubarray {
 
             // check ing the invalid condition
 
-           while (sum > k){
+           if (sum > k){
 
                 sum = sum-arr[l];
                 l++;
