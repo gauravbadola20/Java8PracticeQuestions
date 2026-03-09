@@ -117,6 +117,11 @@ public class LongestMaxSubarray {
 
         }
 
+        for (Map.Entry i : map.entrySet()){
+
+            System.out.println(i);
+        }
+
         return count;
     }
 
