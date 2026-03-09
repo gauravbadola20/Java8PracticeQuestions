@@ -1,4 +1,4 @@
-package DsaQuestions;
+package SlidingWindow;
 
 
 public class MaxConsecutiveOnesIII {
