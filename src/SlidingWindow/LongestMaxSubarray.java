@@ -134,11 +134,13 @@ public class LongestMaxSubarray {
         int n = s.length();
         int maxLen = 0;
 
+
         // traverse through all possible starting points
 
         for (int i  = 0; i < n; i++){
-
             int [] hash = new int[256];
+
+
 
             for (int j = i; j < n; j++){
 
@@ -207,7 +209,7 @@ public class LongestMaxSubarray {
 
         for (int right = 0; right < n; right++){
 
-            //check if already present
+//            check if already present
             while (set.contains(s.charAt(right))){
 
                 set.remove(s.charAt(left));
@@ -222,6 +224,10 @@ public class LongestMaxSubarray {
 
 
 
+        }
+
+        for (char c : set){
+            System.out.println("This: " + c);
         }
         return maxLen;
     }
@@ -263,18 +269,19 @@ public class LongestMaxSubarray {
         int k = 3;
 
 
-        int i = noOfSubArraysWithSumK(arr, n, k);
-        System.out.println(i);
+//        int i = noOfSubArraysWithSumK(arr, n, k);
+//        System.out.println(i);
 
         String input = "cadbzabcd";
 
 
-        int length = longestSubStringWithHashMap(input);
+        int length = longestSubstring(input);
 
-//        System.out.println("Length of longest substring using hashmap without repeating characters: " + length);
+        System.out.println("Length of longest substring using hashmap without repeating characters: " + length);
 
 
     }
+
 
 
 
