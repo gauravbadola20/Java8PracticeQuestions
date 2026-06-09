@@ -1,10 +1,7 @@
 package DsaQuestions.Arrays;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MediumArray {
 
@@ -366,17 +363,173 @@ public class MediumArray {
     }
 
 
+    /// Longest consecutive sequence in an array
+    // {100, 200, 1, 3, 2, 4}
+    // output: 4
+
+//    first we will find the value  using the linear search
+
+    public static boolean linearchSearch(int arr1[], int n, int x){
+
+        for (int i = 0; i < n; i++){
+
+            if (arr1[i] == x){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // now we find the longestSuccessive elements
+    public static int longestSuccessiveElements(int arr1[], int n){
+
+        int longest = 1;
+
+        for (int i = 0; i < n; i++){
+
+            int x = arr1[i];
+            int count = 1;
+
+            while (linearchSearch(arr1, n, x+1)){
+
+                x += 1;
+                count += 1;
+            }
+
+            longest =   Math.max(longest,count);
+        }
+        return longest;
+    }
+
+    // better approach
+
+    public static int longestSuccssiveElementsOptimalApproach(int arr1[], int n){
+
+        if (n == 0) return 0;
+
+        Arrays.sort(arr1);
+
+        int count = 0;
+        int longest = 1;
+
+        int lastSmaller = Integer.MAX_VALUE;
+
+//        100, 200, 1, 3, 2, 4
+        for (int i = 0; i < n; i ++){
+
+            if (arr1[i]-1 == lastSmaller ){
+                count +=1;
+                lastSmaller = arr1[i];
+            }else if (arr1[i] != lastSmaller){
+
+                count = 1;
+                lastSmaller = arr1[i];
+            }
+            longest = Math.max(longest,count);
+        }
+        return longest;
+    }
+
+    //optial approach
+    public static int longestSuccessiveElementss(int arr1[], int n){
+         if (n == 0) return 0;
+
+        Set<Integer> set = new HashSet<>();
+
+        int longest = 1;
+
+        // put all elements in the set
+
+        for (int i = 0; i < n; i++){
+            set.add(arr1[i]);
+        }
+
+        // find the longest sequence
+//        100, 200, 1, 3, 2, 4
+        for (int it : set){
+
+            // if it is a starting number
+
+            if (!set.contains(it-1)){
+                 int count = 1;
+                 int x = it;
+
+                 while (set.contains(x+1)){
+                     x = x+1;
+                     count++;
+
+                 }
+
+                 longest = Math.max(longest,count);
+            }
+
+
+        }
+        return longest;
+    }
+
+
+
+    // count SubArrays with equal sum k
+    // input: 3, 1, 2, 4 k = 6
+
+    public static int countSubArraySumK(int arr1[], int n, int k){
+
+        int count = 0;
+
+        for (int i =- 0; i < n; i++){
+
+            int sum = 0;
+
+            for (int j = i; j < n; j++){
+
+                sum += arr1[j];
+
+                if (sum == k){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+// optimal sum ising the refix sum
+
+    public static int findSubbArraysEqualsK(int arr1[], int n, int k){
+
+        Map<Integer,Integer> map = new HashMap<>();
+
+        int presum = 0;
+        int count = 0;
+        map.put(0,1);
+
+
+        for (int i = 0; i < n; i++){
+
+            presum += arr1[i];
+
+            int remove = presum - k;
+
+            count +=  map.getOrDefault(remove,0);
+
+            map.put(presum, map.getOrDefault(presum,0)+1);
+
+        }
+        return count;
+    }
 
 
     public static void main(String[] args) {
-        int arr1[] =  {4, 7,2,3, 1, 0};
+        int arr1[] =  {3, 1, 2, 4};
         int n = arr1.length;
+        int  k = 6;
 
         int target = 14;
 
-        ArrayList<Integer> leadersArray = findLeadersArrayOp(arr1, n);
+        int longest = findSubbArraysEqualsK(arr1, n, k);
 
-        System.out.println("This is the maxProfit: "+leadersArray);
+        System.out.println("This max subAray count: "+longest);
 
 
     }
