@@ -213,13 +213,112 @@ public class HardArrays {
         return ans;
     }
 
+
+    // count inversion in an array
+    // [3,2,5,1,7]
+    public static int countInversion(int arr1[], int n){
+
+        // count the number of pairs
+        int count =0 ;
+
+        for (int i = 0; i < n; i++){
+
+            for (int j = i+1; j < n; j++){
+
+                if (arr1[i] > arr1[j]){
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    // use merge sort to count inversion
+    public static int merge(int arr1[], int low, int mid, int high){
+
+        int left = low;
+        int right = mid+1;
+        int k = 0;
+
+        // count inversion of control
+        int count = 0;
+
+
+        int temp[] = new int[high-low+1];
+
+        while (left <= mid && right <= high){
+
+
+
+            if (arr1[left] <= arr1[right]){
+                System.out.println("This is the count inside loop: "+count);
+                temp[k++] = arr1[left++];
+            }else {
+                temp[k++] = arr1[right++];
+                count += (mid-left+1);
+            }
+
+
+
+        }
+        // copying remaning element if left half
+        while (left <= mid){
+
+            temp[k] = arr1[left];
+            left++;
+            k++;
+
+
+
+        }
+
+        // copy remaining element of right half
+        while (right <= high){
+            temp[k++] = arr1[right++];
+        }
+
+        // copy back to original arr
+        for (int i =low; i <= high; i++){
+            arr1[i] = temp[i-low];
+        }
+        return count;
+    }
+
+    // now merge the sort funcation
+    public static int mergeSort(int arr1[], int low, int high){
+        int count = 0;
+
+        if (low >= high) return count;
+
+        int mid = (low + high)/2;
+
+        //count inversion in left half
+
+        count += mergeSort(arr1, low, mid);
+
+        //count from right half
+        count += mergeSort(arr1, mid+1, high);
+
+        // count inversion during merge
+
+        count+= merge(arr1, low,mid,high);
+
+        return count;
+    }
+
+    // function to get the number of inversion
+    public static int numberOfInversion(int arr1[], int n){
+        System.out.println("This is the count: ");
+        return mergeSort(arr1,0,n-1);
+    }
+
     public static void main(String[] args) {
 
-        int arr[] = {3,1,2,5,3};
+        int arr[] = {3,2,5,1,7,9};
         int n = arr.length;
 
-        int[] reapeatingMissingNumbers = findMissingAndRepeatingNumbers(arr, n);
+        int countInversion = numberOfInversion(arr, n);
 
-        System.out.println("Repeating and missing numbers: "+Arrays.toString(reapeatingMissingNumbers));
+        System.out.println("Count the inversion in an array: "+countInversion);
     }
 }
